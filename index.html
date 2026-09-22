@@ -1,0 +1,2708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brain Gym — Daily Cognitive Workout</title>
+  <meta name="description" content="Exercise working memory, spatial reasoning, reaction time, and logic deduction in a four-skill cognitive workout.">
+  <style>
+    :root {
+      --bg-canvas: #f8fafc;
+      --bg-surface: #ffffff;
+      --bg-surface-elevated: #ffffff;
+      --bg-subtle: #f1f5f9;
+      --bg-hover: #e2e8f0;
+      --border-subtle: #e2e8f0;
+      --border-strong: #cbd5e1;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
+      --accent-primary: #3b82f6;
+      --accent-primary-hover: #2563eb;
+      --accent-secondary: #8b5cf6;
+      --accent-success: #10b981;
+      --accent-warning: #f59e0b;
+      --accent-danger: #ef4444;
+      --ring-focus: rgba(59, 130, 246, 0.4);
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+      --radius-xl: 18px;
+      --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      --transition-smooth: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    [data-theme="dark"] {
+      --bg-canvas: #090d16;
+      --bg-surface: #111827;
+      --bg-surface-elevated: #1f2937;
+      --bg-subtle: #1a2234;
+      --bg-hover: #26334a;
+      --border-subtle: #1f293d;
+      --border-strong: #334155;
+      --text-primary: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+      --accent-primary: #60a5fa;
+      --accent-primary-hover: #3b82f6;
+      --accent-secondary: #a78bfa;
+      --ring-focus: rgba(96, 165, 250, 0.4);
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg-canvas);
+      color: var(--text-primary);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 16px;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      user-select: none;
+    }
+
+    /* Top Navigation Bar */
+    .header-bar {
+      width: 100%;
+      max-width: 860px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 20px;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+
+    .brand-icon {
+      width: 32px;
+      height: 32px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      color: #ffffff;
+      border-radius: var(--radius-md);
+      font-size: 18px;
+      box-shadow: 0 2px 6px rgba(59, 130, 246, 0.3);
+    }
+
+    .brand-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-subtitle {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .icon-btn {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius-md);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 15px;
+      transition: var(--transition-smooth);
+    }
+
+    .icon-btn:hover {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+      border-color: var(--border-strong);
+    }
+
+    /* Main Container Card */
+    .app-shell {
+      width: 100%;
+      max-width: 860px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-md);
+      padding: 28px 24px;
+      position: relative;
+      overflow: hidden;
+      min-height: 580px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    @media (max-width: 640px) {
+      body { padding: 8px; }
+      .app-shell { padding: 18px 14px; min-height: 520px; }
+      .header-bar { padding: 10px 12px; margin-bottom: 12px; }
+    }
+
+    /* HUD Bar during Game */
+    .game-hud {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding-bottom: 16px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .hud-stat-group {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .hud-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-subtle);
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .hud-badge.domain {
+      background: rgba(59, 130, 246, 0.1);
+      color: var(--accent-primary);
+      border-color: rgba(59, 130, 246, 0.25);
+    }
+
+    .hud-badge.streak {
+      background: rgba(245, 158, 11, 0.1);
+      color: var(--accent-warning);
+      border-color: rgba(245, 158, 11, 0.25);
+    }
+
+    .hud-score {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .hud-score span {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      margin-right: 4px;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 24px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: var(--transition-smooth);
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: var(--accent-primary);
+      color: #ffffff;
+      box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-primary-hover);
+      box-shadow: 0 4px 8px rgba(59, 130, 246, 0.35);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: var(--bg-subtle);
+      border-color: var(--border-subtle);
+      color: var(--text-primary);
+    }
+
+    .btn-secondary:hover {
+      background: var(--bg-hover);
+      border-color: var(--border-strong);
+    }
+
+    .btn-sm {
+      padding: 6px 14px;
+      font-size: 0.85rem;
+      border-radius: var(--radius-sm);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-muted);
+      padding: 6px 10px;
+    }
+
+    .btn-ghost:hover {
+      background: var(--bg-subtle);
+      color: var(--text-primary);
+    }
+
+    .key-badge {
+      display: inline-block;
+      font-family: monospace;
+      font-size: 0.72rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: rgba(0, 0, 0, 0.08);
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      color: inherit;
+      font-weight: 700;
+    }
+
+    [data-theme="dark"] .key-badge {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Screen Views */
+    .view-screen {
+      display: none;
+      flex-direction: column;
+      flex: 1;
+      animation: fadeIn 0.25s ease-out;
+    }
+
+    .view-screen.active {
+      display: flex;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* MENU VIEW */
+    .menu-hero {
+      text-align: center;
+      padding: 20px 0 28px;
+    }
+
+    .menu-title {
+      font-size: 2.1rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, var(--text-primary) 30%, var(--accent-primary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .menu-description {
+      color: var(--text-secondary);
+      max-width: 580px;
+      margin: 0 auto 24px;
+      font-size: 0.98rem;
+    }
+
+    .session-cta-card {
+      background: linear-gradient(145deg, var(--bg-subtle), var(--bg-surface));
+      border: 2px solid var(--accent-primary);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      text-align: center;
+      margin-bottom: 30px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .cta-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(59, 130, 246, 0.15);
+      color: var(--accent-primary);
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 10px;
+    }
+
+    .cta-heading {
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .cta-sub {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      margin-bottom: 18px;
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .skill-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      cursor: pointer;
+      text-align: left;
+      transition: var(--transition-smooth);
+      position: relative;
+    }
+
+    .skill-card:hover {
+      border-color: var(--accent-primary);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .skill-icon {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    .skill-name {
+      font-weight: 700;
+      font-size: 0.95rem;
+      margin-bottom: 4px;
+    }
+
+    .skill-desc {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+      margin-bottom: 10px;
+    }
+
+    .skill-record {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      border-top: 1px solid var(--border-subtle);
+      padding-top: 6px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* INSTRUCTIONS / BRIEFING MODAL */
+    .briefing-card {
+      margin: auto;
+      max-width: 540px;
+      width: 100%;
+      text-align: center;
+      padding: 24px;
+    }
+
+    .briefing-icon {
+      font-size: 44px;
+      margin-bottom: 12px;
+      display: inline-block;
+      animation: pulseSubtle 2s infinite ease-in-out;
+    }
+
+    @keyframes pulseSubtle {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+    }
+
+    .briefing-domain {
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent-primary);
+      margin-bottom: 6px;
+    }
+
+    .briefing-title {
+      font-size: 1.6rem;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .briefing-instruction {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      text-align: left;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    .briefing-instruction ul {
+      margin-left: 20px;
+      margin-top: 8px;
+    }
+
+    .briefing-instruction li {
+      margin-bottom: 4px;
+    }
+
+    .briefing-meta {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+
+    /* COUNTDOWN OVERLAY */
+    .countdown-overlay {
+      position: absolute;
+      inset: 0;
+      background: var(--bg-surface);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+      border-radius: var(--radius-xl);
+    }
+
+    .countdown-number {
+      font-size: 5rem;
+      font-weight: 900;
+      color: var(--accent-primary);
+      animation: countZoom 0.9s ease-out forwards;
+    }
+
+    @keyframes countZoom {
+      0% { transform: scale(0.4); opacity: 0; }
+      50% { transform: scale(1.15); opacity: 1; }
+      100% { transform: scale(1); opacity: 0.9; }
+    }
+
+    /* ARENA & FEEDBACK */
+    .game-arena {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      min-height: 380px;
+      width: 100%;
+    }
+
+    .feedback-banner {
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      pointer-events: none;
+      opacity: 0;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 20;
+    }
+
+    .feedback-banner.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(14px);
+    }
+
+    .feedback-banner.success {
+      background: rgba(16, 185, 129, 0.15);
+      color: #059669;
+      border: 1px solid #10b981;
+    }
+
+    .feedback-banner.error {
+      background: rgba(239, 68, 68, 0.15);
+      color: #dc2626;
+      border: 1px solid #ef4444;
+    }
+
+    /* MINI-GAME 1: WORKING MEMORY (SIMON SEQUENCE) */
+    .memory-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      width: 100%;
+    }
+
+    .memory-status-tag {
+      font-size: 0.92rem;
+      font-weight: 600;
+      padding: 6px 16px;
+      border-radius: 999px;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      transition: var(--transition-smooth);
+    }
+
+    .memory-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      width: 100%;
+      max-width: 340px;
+    }
+
+    .memory-grid.six-pads {
+      grid-template-columns: repeat(3, 1fr);
+      max-width: 420px;
+    }
+
+    .memory-pad {
+      aspect-ratio: 1;
+      border-radius: var(--radius-lg);
+      border: 3px solid transparent;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      transition: transform 0.12s ease, filter 0.12s ease, box-shadow 0.12s ease;
+      box-shadow: var(--shadow-sm);
+      position: relative;
+    }
+
+    .memory-pad:active {
+      transform: scale(0.95);
+    }
+
+    .memory-pad .pad-key {
+      font-size: 0.75rem;
+      opacity: 0.75;
+      font-family: monospace;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    /* Pad Theme Colors */
+    .pad-0 { background: #f87171; color: #fff; border-color: #ef4444; } /* Coral Red */
+    .pad-1 { background: #fbbf24; color: #1e293b; border-color: #f59e0b; } /* Amber Gold */
+    .pad-2 { background: #34d399; color: #fff; border-color: #10b981; } /* Emerald */
+    .pad-3 { background: #60a5fa; color: #fff; border-color: #3b82f6; } /* Blue */
+    .pad-4 { background: #a78bfa; color: #fff; border-color: #8b5cf6; } /* Violet */
+    .pad-5 { background: #2dd4bf; color: #fff; border-color: #0d9488; } /* Teal */
+
+    .memory-pad.lit {
+      filter: brightness(1.6) contrast(1.2);
+      transform: scale(1.05);
+      box-shadow: 0 0 25px currentColor;
+      z-index: 10;
+    }
+
+    /* MINI-GAME 2: SPATIAL / VISUAL REASONING (ROTATION) */
+    .spatial-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      width: 100%;
+    }
+
+    .target-box {
+      background: var(--bg-subtle);
+      border: 2px dashed var(--accent-primary);
+      border-radius: var(--radius-lg);
+      padding: 16px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .target-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--accent-primary);
+    }
+
+    .spatial-options-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      width: 100%;
+      max-width: 480px;
+    }
+
+    @media (min-width: 600px) {
+      .spatial-options-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    .spatial-option-btn {
+      background: var(--bg-surface);
+      border: 2px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 14px 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+      position: relative;
+    }
+
+    .spatial-option-btn:hover {
+      border-color: var(--accent-primary);
+      background: var(--bg-subtle);
+      transform: translateY(-2px);
+    }
+
+    .spatial-option-btn.correct-reveal {
+      border-color: var(--accent-success);
+      background: rgba(16, 185, 129, 0.1);
+      box-shadow: 0 0 12px rgba(16, 185, 129, 0.3);
+    }
+
+    .spatial-option-btn.wrong-reveal {
+      border-color: var(--accent-danger);
+      background: rgba(239, 68, 68, 0.1);
+    }
+
+    /* MINI-GAME 3: REACTION TIME & FOCUS */
+    .reaction-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      width: 100%;
+      max-width: 520px;
+    }
+
+    .reaction-rule-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      width: 100%;
+      padding: 10px 16px;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .reaction-rule-target {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--accent-success);
+    }
+
+    .reaction-rule-avoid {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--accent-danger);
+    }
+
+    .reaction-arena-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      width: 100%;
+      aspect-ratio: 1.2;
+      max-width: 440px;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 14px;
+      position: relative;
+    }
+
+    .reaction-slot {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.1s ease, border-color 0.1s ease;
+      min-height: 80px;
+    }
+
+    .reaction-slot:hover {
+      border-color: var(--border-strong);
+    }
+
+    .reaction-slot .slot-key {
+      position: absolute;
+      top: 4px;
+      left: 6px;
+      font-size: 0.65rem;
+      font-family: monospace;
+      color: var(--text-muted);
+      opacity: 0.7;
+    }
+
+    .reaction-stimulus {
+      width: 52px;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      animation: popIn 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0.3); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    /* MINI-GAME 4: LOGIC & DEDUCTION */
+    .logic-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      width: 100%;
+      max-width: 560px;
+    }
+
+    .logic-puzzle-card {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .logic-badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+    }
+
+    .logic-prompt {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+    }
+
+    .sequence-display {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .seq-item {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 44px;
+      height: 44px;
+      padding: 0 10px;
+      border-radius: var(--radius-md);
+      background: var(--bg-surface);
+      border: 1px solid var(--border-strong);
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .seq-item.missing {
+      background: rgba(59, 130, 246, 0.12);
+      border: 2px dashed var(--accent-primary);
+      color: var(--accent-primary);
+      font-size: 1.4rem;
+    }
+
+    .matrix-grid-2x2 {
+      display: grid;
+      grid-template-columns: repeat(2, 80px);
+      gap: 10px;
+      margin: 0 auto 12px;
+    }
+
+    .matrix-cell {
+      width: 80px;
+      height: 80px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .matrix-cell.missing {
+      background: rgba(59, 130, 246, 0.12);
+      border: 2px dashed var(--accent-primary);
+      color: var(--accent-primary);
+      font-weight: 800;
+      font-size: 1.5rem;
+    }
+
+    .logic-options-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      width: 100%;
+    }
+
+    .logic-opt-btn {
+      background: var(--bg-surface);
+      border: 2px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 14px 18px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: var(--transition-smooth);
+    }
+
+    .logic-opt-btn:hover {
+      border-color: var(--accent-primary);
+      background: var(--bg-subtle);
+      transform: translateY(-2px);
+    }
+
+    .logic-opt-btn.correct-reveal {
+      border-color: var(--accent-success);
+      background: rgba(16, 185, 129, 0.1);
+    }
+
+    .logic-opt-btn.wrong-reveal {
+      border-color: var(--accent-danger);
+      background: rgba(239, 68, 68, 0.1);
+    }
+
+    /* SUMMARY / RESULTS VIEW */
+    .summary-view {
+      text-align: center;
+      padding: 10px 0;
+    }
+
+    .summary-header {
+      margin-bottom: 24px;
+    }
+
+    .summary-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 999px;
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--accent-success);
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+    }
+
+    .summary-score-large {
+      font-size: 3rem;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .summary-subtitle {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+    }
+
+    .breakdown-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 14px;
+      margin-bottom: 28px;
+      text-align: left;
+    }
+
+    .breakdown-card {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+    }
+
+    .breakdown-title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .breakdown-score {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+
+    .breakdown-detail {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      line-height: 1.4;
+      margin-bottom: 8px;
+    }
+
+    .strength-bar-bg {
+      height: 6px;
+      background: var(--border-subtle);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .strength-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #3b82f6, #10b981);
+      border-radius: 999px;
+      transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .summary-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    /* ROUND TRANSITION INTERSTITIAL */
+    .round-transition-card {
+      margin: auto;
+      text-align: center;
+      max-width: 440px;
+    }
+
+    .transition-emoji {
+      font-size: 48px;
+      margin-bottom: 12px;
+      display: inline-block;
+      animation: popIn 0.3s ease;
+    }
+
+    .transition-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .transition-stat {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+    }
+
+    /* Screen-Shake & Feedback animations */
+    .shake-anim {
+      animation: shake 0.3s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    }
+
+    @keyframes shake {
+      10%, 90% { transform: translate3d(-2px, 0, 0); }
+      20%, 80% { transform: translate3d(3px, 0, 0); }
+      30%, 50%, 70% { transform: translate3d(-3px, 0, 0); }
+      40%, 60% { transform: translate3d(3px, 0, 0); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header Navigation -->
+  <header class="header-bar" id="headerBar">
+    <div class="brand-group" id="brandBtn" title="Go to Main Menu">
+      <div class="brand-icon">🧠</div>
+      <div>
+        <div class="brand-title">Brain Gym</div>
+        <div class="brand-subtitle">Daily Cognitive Workout</div>
+      </div>
+    </div>
+    <div class="header-controls">
+      <button class="icon-btn" id="soundToggleBtn" title="Toggle Audio (S)">
+        <span id="soundIcon">🔊</span>
+      </button>
+      <button class="icon-btn" id="themeToggleBtn" title="Toggle Theme (T)">
+        <span id="themeIcon">🌓</span>
+      </button>
+      <button class="btn btn-secondary btn-sm" id="exitToMenuBtn" style="display: none;" title="Exit to Menu (Esc)">
+        Menu
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Application Shell -->
+  <main class="app-shell" id="appShell">
+
+    <!-- Active In-Game HUD -->
+    <div class="game-hud" id="gameHud" style="display: none;">
+      <div class="hud-stat-group">
+        <div class="hud-badge domain" id="hudDomainBadge">🧠 Domain</div>
+        <div class="hud-badge" id="hudLevelBadge">Level 1</div>
+        <div class="hud-badge streak" id="hudStreakBadge">🔥 Streak: 0</div>
+      </div>
+      <div class="hud-score">
+        <span>Score</span><strong id="hudScoreVal">0</strong>
+      </div>
+    </div>
+
+    <!-- Feedback Banner (Correct / Missed) -->
+    <div class="feedback-banner" id="feedbackBanner">Awesome! +100</div>
+
+    <!-- Countdown Overlay (3, 2, 1, Go!) -->
+    <div class="countdown-overlay" id="countdownOverlay">
+      <div class="countdown-number" id="countdownNum">3</div>
+    </div>
+
+    <!-- 1. MAIN MENU SCREEN -->
+    <section class="view-screen active" id="menuView">
+      <div class="menu-hero">
+        <h1 class="menu-title">Challenge Your Cognitive Core</h1>
+        <p class="menu-description">
+          Exercise four essential mental domains in calibrated, progressive rounds: working memory, spatial reasoning, rapid focus, and deductive logic.
+        </p>
+      </div>
+
+      <!-- Featured: Full Session Button -->
+      <div class="session-cta-card">
+        <div class="cta-badge">Recommended Daily Routine</div>
+        <h2 class="cta-heading">Full Brain Gym Session</h2>
+        <p class="cta-sub">Cycle through all 4 cognitive domains back-to-back with progressive difficulty (~3-4 min).</p>
+        <button class="btn btn-primary" id="startFullSessionBtn">
+          Start Full Session <span class="key-badge">Space</span>
+        </button>
+      </div>
+
+      <!-- Practice Single Skill Grid -->
+      <div style="margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;">
+        <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--text-secondary);">Practice a Single Skill</h3>
+        <span style="font-size: 0.8rem; color: var(--text-muted);">Pick any domain to train</span>
+      </div>
+
+      <div class="skills-grid">
+        <!-- Skill 1 -->
+        <div class="skill-card" id="practiceMemoryBtn" data-skill="memory">
+          <div class="skill-icon">🧩</div>
+          <div class="skill-name">Working Memory</div>
+          <div class="skill-desc">Repeat expanding melodic patterns in sequence recall.</div>
+          <div class="skill-record">
+            <span>Best Length:</span>
+            <strong id="recMemoryVal">-</strong>
+          </div>
+        </div>
+
+        <!-- Skill 2 -->
+        <div class="skill-card" id="practiceSpatialBtn" data-skill="spatial">
+          <div class="skill-icon">📐</div>
+          <div class="skill-name">Spatial Reasoning</div>
+          <div class="skill-desc">Identify the rotated match among mirrored distractors.</div>
+          <div class="skill-record">
+            <span>Best Level:</span>
+            <strong id="recSpatialVal">-</strong>
+          </div>
+        </div>
+
+        <!-- Skill 3 -->
+        <div class="skill-card" id="practiceReactionBtn" data-skill="reaction">
+          <div class="skill-icon">⚡</div>
+          <div class="skill-name">Reaction & Focus</div>
+          <div class="skill-desc">Strike targets instantly while inhibiting distractor clicks.</div>
+          <div class="skill-record">
+            <span>Best Avg:</span>
+            <strong id="recReactionVal">-</strong>
+          </div>
+        </div>
+
+        <!-- Skill 4 -->
+        <div class="skill-card" id="practiceLogicBtn" data-skill="logic">
+          <div class="skill-icon">🔍</div>
+          <div class="skill-name">Logic & Deduction</div>
+          <div class="skill-desc">Deduce missing numbers, matrices, and constraint puzzles.</div>
+          <div class="skill-record">
+            <span>Best Level:</span>
+            <strong id="recLogicVal">-</strong>
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: auto; padding-top: 16px; font-size: 0.78rem; color: var(--text-muted);">
+        All progress is saved locally in your browser. Fully offline & private.
+      </div>
+    </section>
+
+    <!-- 2. INSTRUCTIONS / BRIEFING SCREEN -->
+    <section class="view-screen" id="briefingView">
+      <div class="briefing-card">
+        <div class="briefing-icon" id="briefingIcon">🧩</div>
+        <div class="briefing-domain" id="briefingDomain">Domain 1 of 4</div>
+        <h2 class="briefing-title" id="briefingTitle">Working Memory</h2>
+
+        <div class="briefing-instruction" id="briefingInstruction">
+          <!-- Populated dynamically -->
+        </div>
+
+        <div class="briefing-meta">
+          <div><strong id="briefingTargetTrials">3</strong> target trials</div>
+          <div>•</div>
+          <div>Progressive difficulty</div>
+        </div>
+
+        <button class="btn btn-primary" id="startRoundBtn">
+          Begin Challenge <span class="key-badge">Space</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- 3. GAMEPLAY SCREENS (ARENA) -->
+    <section class="view-screen" id="gameView">
+      <div class="game-arena" id="gameArena">
+
+        <!-- SUB-ARENA 1: MEMORY -->
+        <div class="memory-container" id="arenaMemory" style="display: none;">
+          <div class="memory-status-tag" id="memoryStatusTag">Watch the pattern...</div>
+          <div class="memory-grid" id="memoryGrid">
+            <!-- Pads generated in JS -->
+          </div>
+        </div>
+
+        <!-- SUB-ARENA 2: SPATIAL -->
+        <div class="spatial-container" id="arenaSpatial" style="display: none;">
+          <div class="target-box">
+            <span class="target-label">Target Shape</span>
+            <div id="spatialTargetSvg"></div>
+          </div>
+          <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-secondary);">
+            Which option is the EXACT shape rotated? (Distractors are mirrored or altered)
+          </div>
+          <div class="spatial-options-grid" id="spatialOptionsGrid">
+            <!-- Options generated in JS -->
+          </div>
+        </div>
+
+        <!-- SUB-ARENA 3: REACTION -->
+        <div class="reaction-container" id="arenaReaction" style="display: none;">
+          <div class="reaction-rule-bar">
+            <div class="reaction-rule-target">
+              <span>TARGET:</span>
+              <strong id="reactionTargetLabel">⚡ Star (Green)</strong>
+            </div>
+            <div class="reaction-rule-avoid">
+              <span>AVOID:</span>
+              <strong id="reactionAvoidLabel">🔺 Red / ◼️ Blue</strong>
+            </div>
+          </div>
+          <div style="font-size: 0.8rem; color: var(--text-muted);">
+            Tap targets immediately. Ignore distractors. Use mouse/touch or keys 1–9.
+          </div>
+          <div class="reaction-arena-grid" id="reactionArenaGrid">
+            <!-- 9 slots generated in JS -->
+          </div>
+        </div>
+
+        <!-- SUB-ARENA 4: LOGIC -->
+        <div class="logic-container" id="arenaLogic" style="display: none;">
+          <div class="logic-puzzle-card">
+            <div class="logic-badge" id="logicBadge">Sequence Deduction</div>
+            <div class="logic-prompt" id="logicPrompt">What is the next number in the pattern?</div>
+            <div id="logicVisualContainer">
+              <!-- Rendered sequence or matrix -->
+            </div>
+          </div>
+          <div class="logic-options-grid" id="logicOptionsGrid">
+            <!-- 4 Multiple choice buttons -->
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 4. ROUND CLEARED TRANSITION SCREEN -->
+    <section class="view-screen" id="transitionView">
+      <div class="round-transition-card">
+        <div class="transition-emoji" id="transEmoji">✨</div>
+        <h2 class="transition-title" id="transTitle">Domain Complete!</h2>
+        <p class="transition-stat" id="transStat">Working memory score: +650 pts</p>
+        <button class="btn btn-primary" id="transNextBtn">
+          Next Domain <span class="key-badge">Space</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- 5. SUMMARY / RESULTS SCREEN -->
+    <section class="view-screen summary-view" id="summaryView">
+      <div class="summary-header">
+        <div class="summary-badge">Session Completed</div>
+        <div class="summary-score-large" id="sumTotalScore">0</div>
+        <div class="summary-subtitle" id="sumAssessment">Cognitive Assessment: Balanced Performer</div>
+      </div>
+
+      <div class="breakdown-grid" id="summaryBreakdownGrid">
+        <!-- Filled dynamically per skill -->
+      </div>
+
+      <div class="summary-actions">
+        <button class="btn btn-primary" id="sumPlayAgainBtn">
+          Play Full Session Again <span class="key-badge">Space</span>
+        </button>
+        <button class="btn btn-secondary" id="sumPracticeWeakestBtn">
+          Practice Weakest Domain
+        </button>
+        <button class="btn btn-ghost" id="sumMenuBtn">
+          Return to Menu
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Sound & Logic Engine Script -->
+  <script>
+  (function() {
+    'use strict';
+
+    /* ==========================================================
+       1. SOUND SYNTHESIZER (Web Audio API)
+       ========================================================== */
+    class AudioSynthesizer {
+      constructor() {
+        this.ctx = null;
+        this.enabled = true;
+      }
+
+      init() {
+        if (!this.ctx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (AudioContext) {
+            this.ctx = new AudioContext();
+          }
+        }
+        if (this.ctx && this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      }
+
+      playTone(freq, type = 'sine', duration = 0.2, gainVal = 0.15) {
+        if (!this.enabled) return;
+        this.init();
+        if (!this.ctx) return;
+
+        try {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+
+          gain.gain.setValueAtTime(gainVal, this.ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + duration);
+
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+
+          osc.start();
+          osc.stop(this.ctx.currentTime + duration);
+        } catch (e) {
+          // Audio blocked or not supported
+        }
+      }
+
+      playChord(freqs, type = 'sine', duration = 0.3) {
+        if (!this.enabled) return;
+        freqs.forEach(f => this.playTone(f, type, duration, 0.08));
+      }
+
+      playSuccess() {
+        this.playChord([523.25, 659.25, 783.99], 'triangle', 0.35); // C5, E5, G5
+      }
+
+      playError() {
+        this.playTone(180, 'sawtooth', 0.25, 0.12);
+      }
+
+      playClick() {
+        this.playTone(600, 'sine', 0.04, 0.05);
+      }
+
+      playCountdown() {
+        this.playTone(440, 'sine', 0.08, 0.1);
+      }
+
+      playCountdownGo() {
+        this.playTone(880, 'triangle', 0.2, 0.15);
+      }
+    }
+
+    const sound = new AudioSynthesizer();
+
+    /* ==========================================================
+       2. PERSISTENCE & LOCAL HIGH SCORES
+       ========================================================== */
+    const STORAGE_KEY = 'braingym_records_v1';
+    let highScores = {
+      totalSessions: 0,
+      bestSessionScore: 0,
+      memoryBestLength: 0,
+      spatialBestLevel: 0,
+      reactionBestAvgMs: null,
+      logicBestLevel: 0
+    };
+
+    function loadHighScores() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          highScores = Object.assign(highScores, JSON.parse(saved));
+        }
+      } catch (e) {
+        // Fallback to in-memory
+      }
+      updateMenuRecordBadges();
+    }
+
+    function saveHighScores() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(highScores));
+      } catch (e) {
+        // Fallback
+      }
+      updateMenuRecordBadges();
+    }
+
+    function updateMenuRecordBadges() {
+      const elMem = document.getElementById('recMemoryVal');
+      const elSpa = document.getElementById('recSpatialVal');
+      const elRea = document.getElementById('recReactionVal');
+      const elLog = document.getElementById('recLogicVal');
+
+      if (elMem) elMem.textContent = highScores.memoryBestLength ? `${highScores.memoryBestLength} steps` : '-';
+      if (elSpa) elSpa.textContent = highScores.spatialBestLevel ? `Level ${highScores.spatialBestLevel}` : '-';
+      if (elRea) elRea.textContent = highScores.reactionBestAvgMs ? `${Math.round(highScores.reactionBestAvgMs)} ms` : '-';
+      if (elLog) elLog.textContent = highScores.logicBestLevel ? `Level ${highScores.logicBestLevel}` : '-';
+    }
+
+    /* ==========================================================
+       3. DOMAIN METADATA & INSTRUCTIONS
+       ========================================================== */
+    const DOMAINS = {
+      memory: {
+        id: 'memory',
+        name: 'Working Memory',
+        icon: '🧩',
+        badge: 'Sequence Recall',
+        trialsInSession: 3,
+        instructions: `
+          <strong>How to play:</strong>
+          <ul>
+            <li>Watch the pads light up with melodic tones in a specific order.</li>
+            <li>Once "Your Turn!" appears, repeat the exact sequence back.</li>
+            <li>The sequence lengthens by 1 step with every successful recall.</li>
+            <li>Click or use keyboard keys <span class="key-badge">1</span> <span class="key-badge">2</span> <span class="key-badge">3</span> <span class="key-badge">4</span>.</li>
+          </ul>
+        `
+      },
+      spatial: {
+        id: 'spatial',
+        name: 'Spatial Reasoning',
+        icon: '📐',
+        badge: 'Mental Rotation',
+        trialsInSession: 3,
+        instructions: `
+          <strong>How to play:</strong>
+          <ul>
+            <li>Analyze the <strong>Target Shape</strong> inside the frame.</li>
+            <li>Identify which candidate shape is the exact target rotated in 2D space.</li>
+            <li>Distractor choices are <em>mirrored</em> (reflected) or structurally altered!</li>
+            <li>Use mouse/touch or keys <span class="key-badge">1</span> <span class="key-badge">2</span> <span class="key-badge">3</span> <span class="key-badge">4</span>.</li>
+          </ul>
+        `
+      },
+      reaction: {
+        id: 'reaction',
+        name: 'Reaction & Focus',
+        icon: '⚡',
+        badge: 'Selective Focus',
+        trialsInSession: 6,
+        instructions: `
+          <strong>How to play:</strong>
+          <ul>
+            <li>A target item will flash across the arena slots.</li>
+            <li>Click or tap the <strong>TARGET</strong> immediately to measure your response time.</li>
+            <li><strong>DO NOT</strong> click distractors (false alarms penalty).</li>
+            <li>Click directly or use number keys <span class="key-badge">1</span>–<span class="key-badge">9</span>.</li>
+          </ul>
+        `
+      },
+      logic: {
+        id: 'logic',
+        name: 'Logic & Deduction',
+        icon: '🔍',
+        badge: 'Pattern Deduction',
+        trialsInSession: 3,
+        instructions: `
+          <strong>How to play:</strong>
+          <ul>
+            <li>Evaluate the sequence, visual matrix, or relation logic shown.</li>
+            <li>Deduce the missing element that logically satisfies the pattern rule.</li>
+            <li>Faster answers earn generous speed bonuses.</li>
+            <li>Select your deduction using keys <span class="key-badge">1</span> <span class="key-badge">2</span> <span class="key-badge">3</span> <span class="key-badge">4</span>.</li>
+          </ul>
+        `
+      }
+    };
+
+    const SESSION_DOMAIN_ORDER = ['memory', 'spatial', 'reaction', 'logic'];
+
+    /* ==========================================================
+       4. GLOBAL GAME STATE
+       ========================================================== */
+    const state = {
+      mode: 'menu', // 'menu', 'briefing', 'countdown', 'playing', 'transition', 'summary'
+      isFullSession: false,
+      currentDomainIdx: 0,
+      activeDomain: 'memory',
+
+      // Session Cumulative Stats
+      sessionScore: 0,
+      runningStreak: 0,
+      maxStreak: 0,
+
+      // Per-Domain Performance Tracking
+      domainStats: {
+        memory: { score: 0, maxSequence: 0, successes: 0, attempts: 0 },
+        spatial: { score: 0, levelReached: 1, correct: 0, total: 0, totalTimeMs: 0 },
+        reaction: { score: 0, reactionTimes: [], falseAlarms: 0, misses: 0 },
+        logic: { score: 0, levelReached: 1, correct: 0, total: 0, totalTimeMs: 0 }
+      },
+
+      // Current Domain Round State
+      currentLevel: 1,
+      currentTrial: 1,
+      maxTrialsInDomain: 3,
+      domainScore: 0,
+
+      // Flags
+      acceptingInput: false,
+      cleanups: []
+    };
+
+    function resetSessionState(isFull, domainKey = 'memory') {
+      state.isFullSession = isFull;
+      state.currentDomainIdx = 0;
+      state.activeDomain = isFull ? SESSION_DOMAIN_ORDER[0] : domainKey;
+      state.sessionScore = 0;
+      state.runningStreak = 0;
+      state.maxStreak = 0;
+
+      state.domainStats = {
+        memory: { score: 0, maxSequence: 0, successes: 0, attempts: 0 },
+        spatial: { score: 0, levelReached: 1, correct: 0, total: 0, totalTimeMs: 0 },
+        reaction: { score: 0, reactionTimes: [], falseAlarms: 0, misses: 0 },
+        logic: { score: 0, levelReached: 1, correct: 0, total: 0, totalTimeMs: 0 }
+      };
+
+      prepareDomainRound(state.activeDomain);
+    }
+
+    function prepareDomainRound(domainKey) {
+      state.activeDomain = domainKey;
+      state.currentLevel = 1;
+      state.currentTrial = 1;
+      state.domainScore = 0;
+      state.maxTrialsInDomain = state.isFullSession 
+        ? DOMAINS[domainKey].trialsInSession 
+        : 999; // Endless practice until user quits
+    }
+
+    /* ==========================================================
+       5. VIEW ROUTING & HUD UPDATES
+       ========================================================== */
+    const views = {
+      menu: document.getElementById('menuView'),
+      briefing: document.getElementById('briefingView'),
+      game: document.getElementById('gameView'),
+      transition: document.getElementById('transitionView'),
+      summary: document.getElementById('summaryView')
+    };
+
+    const gameHud = document.getElementById('gameHud');
+    const exitToMenuBtn = document.getElementById('exitToMenuBtn');
+
+    function showView(viewKey) {
+      state.mode = viewKey;
+      clearScheduledCleanups();
+
+      Object.keys(views).forEach(k => {
+        if (views[k]) views[k].classList.toggle('active', k === viewKey);
+      });
+
+      // Manage HUD visibility
+      const inActivePlay = viewKey === 'game';
+      if (gameHud) gameHud.style.display = inActivePlay ? 'flex' : 'none';
+      if (exitToMenuBtn) exitToMenuBtn.style.display = (viewKey === 'menu') ? 'none' : 'inline-flex';
+
+      if (inActivePlay) {
+        updateHud();
+      }
+    }
+
+    function updateHud() {
+      const d = DOMAINS[state.activeDomain];
+      document.getElementById('hudDomainBadge').textContent = `${d.icon} ${d.badge}`;
+      document.getElementById('hudLevelBadge').textContent = `Level ${state.currentLevel} (Trial ${state.currentTrial}${state.isFullSession ? '/' + state.maxTrialsInDomain : ''})`;
+      document.getElementById('hudStreakBadge').textContent = `🔥 Streak: ${state.runningStreak}`;
+      document.getElementById('hudScoreVal').textContent = state.sessionScore;
+    }
+
+    function showFeedback(text, isSuccess) {
+      const fb = document.getElementById('feedbackBanner');
+      if (!fb) return;
+      fb.textContent = text;
+      fb.className = `feedback-banner show ${isSuccess ? 'success' : 'error'}`;
+      setTimeout(() => {
+        fb.classList.remove('show');
+      }, 1000);
+    }
+
+    function shakeArena() {
+      const arena = document.getElementById('gameArena');
+      if (arena) {
+        arena.classList.remove('shake-anim');
+        void arena.offsetWidth; // trigger reflow
+        arena.classList.add('shake-anim');
+      }
+    }
+
+    function addCleanup(fn) {
+      state.cleanups.push(fn);
+    }
+
+    function clearScheduledCleanups() {
+      while (state.cleanups.length > 0) {
+        const fn = state.cleanups.pop();
+        try { fn(); } catch (e) {}
+      }
+    }
+
+    /* ==========================================================
+       6. GAME FLOW: BRIEFING -> COUNTDOWN -> ENGINE -> TRANSITION -> SUMMARY
+       ========================================================== */
+    function openBriefing(domainKey) {
+      state.activeDomain = domainKey;
+      const d = DOMAINS[domainKey];
+
+      document.getElementById('briefingIcon').textContent = d.icon;
+      document.getElementById('briefingDomain').textContent = state.isFullSession
+        ? `Domain ${state.currentDomainIdx + 1} of ${SESSION_DOMAIN_ORDER.length}`
+        : 'Practice Mode';
+      document.getElementById('briefingTitle').textContent = d.name;
+      document.getElementById('briefingInstruction').innerHTML = d.instructions;
+      document.getElementById('briefingTargetTrials').textContent = state.isFullSession
+        ? `${d.trialsInSession}`
+        : 'Continuous';
+
+      showView('briefing');
+    }
+
+    function startCountdown(onComplete) {
+      const overlay = document.getElementById('countdownOverlay');
+      const num = document.getElementById('countdownNum');
+      if (!overlay || !num) return onComplete();
+
+      overlay.style.display = 'flex';
+      let count = 3;
+      num.textContent = count;
+      sound.playCountdown();
+
+      const interval = setInterval(() => {
+        count--;
+        if (count > 0) {
+          num.textContent = count;
+          num.style.animation = 'none';
+          void num.offsetWidth;
+          num.style.animation = 'countZoom 0.9s ease-out forwards';
+          sound.playCountdown();
+        } else if (count === 0) {
+          num.textContent = 'GO!';
+          sound.playCountdownGo();
+        } else {
+          clearInterval(interval);
+          overlay.style.display = 'none';
+          onComplete();
+        }
+      }, 700);
+
+      addCleanup(() => {
+        clearInterval(interval);
+        overlay.style.display = 'none';
+      });
+    }
+
+    function startActiveDomainPlay() {
+      showView('game');
+      // Hide all sub-arenas
+      document.getElementById('arenaMemory').style.display = 'none';
+      document.getElementById('arenaSpatial').style.display = 'none';
+      document.getElementById('arenaReaction').style.display = 'none';
+      document.getElementById('arenaLogic').style.display = 'none';
+
+      startCountdown(() => {
+        if (state.activeDomain === 'memory') initMemoryGame();
+        else if (state.activeDomain === 'spatial') initSpatialGame();
+        else if (state.activeDomain === 'reaction') initReactionGame();
+        else if (state.activeDomain === 'logic') initLogicGame();
+      });
+    }
+
+    function onDomainTrialFinished(isSuccess, pointsGained) {
+      if (isSuccess) {
+        state.runningStreak++;
+        if (state.runningStreak > state.maxStreak) {
+          state.maxStreak = state.runningStreak;
+        }
+        state.sessionScore += pointsGained;
+        state.domainScore += pointsGained;
+        state.domainStats[state.activeDomain].score += pointsGained;
+      } else {
+        state.runningStreak = 0;
+        shakeArena();
+      }
+
+      updateHud();
+
+      // Check if domain is finished (in full session mode)
+      if (state.isFullSession && state.currentTrial >= state.maxTrialsInDomain) {
+        finishActiveDomain();
+      } else {
+        // Advance to next trial in current domain
+        state.currentTrial++;
+        if (isSuccess) {
+          state.currentLevel++;
+        }
+        updateHud();
+
+        // Brief breather then start next trial
+        const timer = setTimeout(() => {
+          if (state.activeDomain === 'memory') memoryNextSequence();
+          else if (state.activeDomain === 'spatial') spatialNextTrial();
+          else if (state.activeDomain === 'reaction') reactionNextTrial();
+          else if (state.activeDomain === 'logic') logicNextTrial();
+        }, 900);
+        addCleanup(() => clearTimeout(timer));
+      }
+    }
+
+    function finishActiveDomain() {
+      if (!state.isFullSession) {
+        // In practice mode, show transition card with option to continue or return
+        openTransitionScreen(false);
+        return;
+      }
+
+      // Check if this was the last domain in session
+      if (state.currentDomainIdx >= SESSION_DOMAIN_ORDER.length - 1) {
+        showSessionSummary();
+      } else {
+        // Show Interstitial card before next domain
+        openTransitionScreen(true);
+      }
+    }
+
+    function openTransitionScreen(hasNextDomain) {
+      const d = DOMAINS[state.activeDomain];
+      document.getElementById('transEmoji').textContent = '🎉';
+      document.getElementById('transTitle').textContent = `${d.name} Complete!`;
+      document.getElementById('transStat').textContent = `Domain score: +${state.domainScore} pts | Current streak: ${state.runningStreak}`;
+
+      const nextBtn = document.getElementById('transNextBtn');
+      if (hasNextDomain) {
+        nextBtn.innerHTML = 'Next Domain <span class="key-badge">Space</span>';
+        nextBtn.onclick = () => {
+          state.currentDomainIdx++;
+          const nextDomain = SESSION_DOMAIN_ORDER[state.currentDomainIdx];
+          prepareDomainRound(nextDomain);
+          openBriefing(nextDomain);
+        };
+      } else {
+        nextBtn.innerHTML = 'Back to Menu <span class="key-badge">Space</span>';
+        nextBtn.onclick = () => {
+          showView('menu');
+        };
+      }
+
+      showView('transition');
+    }
+
+    function showSessionSummary() {
+      highScores.totalSessions++;
+      if (state.sessionScore > highScores.bestSessionScore) {
+        highScores.bestSessionScore = state.sessionScore;
+      }
+      saveHighScores();
+
+      document.getElementById('sumTotalScore').textContent = state.sessionScore.toLocaleString();
+
+      // Determine cognitive profile strength
+      const stats = state.domainStats;
+      const scores = [
+        { key: 'memory', name: 'Working Memory', score: stats.memory.score, val: `Level ${stats.memory.maxSequence}` },
+        { key: 'spatial', name: 'Spatial Reasoning', score: stats.spatial.score, val: `${stats.spatial.correct}/${stats.spatial.total} correct` },
+        { key: 'reaction', name: 'Reaction & Focus', score: stats.reaction.score, val: stats.reaction.reactionTimes.length ? `${Math.round(stats.reaction.reactionTimes.reduce((a,b)=>a+b,0)/stats.reaction.reactionTimes.length)}ms avg` : 'N/A' },
+        { key: 'logic', name: 'Logic Deduction', score: stats.logic.score, val: `${stats.logic.correct}/${stats.logic.total} correct` }
+      ];
+
+      // Find max score domain
+      scores.sort((a, b) => b.score - a.score);
+      const topSkill = scores[0];
+      const weakestSkill = scores[scores.length - 1];
+
+      let assessment = `Cognitive Profile: Exceptional in ${topSkill.name}!`;
+      if (stats.reaction.reactionTimes.length && stats.reaction.reactionTimes.reduce((a,b)=>a+b,0)/stats.reaction.reactionTimes.length < 320) {
+        assessment = "Cognitive Profile: Lightning Reflexes & Sharp Focus!";
+      }
+      document.getElementById('sumAssessment').textContent = assessment;
+
+      // Populate breakdown cards with relative strength bar
+      const maxPossibleScore = Math.max(...scores.map(s => s.score), 100);
+      const grid = document.getElementById('summaryBreakdownGrid');
+      grid.innerHTML = '';
+
+      scores.forEach(s => {
+        const pct = Math.min(100, Math.max(15, Math.round((s.score / maxPossibleScore) * 100)));
+        const card = document.createElement('div');
+        card.className = 'breakdown-card';
+        card.innerHTML = `
+          <div class="breakdown-title">${DOMAINS[s.key].icon} ${s.name}</div>
+          <div class="breakdown-score">+${s.score}</div>
+          <div class="breakdown-detail">Performance: <strong>${s.val}</strong></div>
+          <div class="strength-bar-bg">
+            <div class="strength-bar-fill" style="width: ${pct}%;"></div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+
+      // Actions
+      document.getElementById('sumPlayAgainBtn').onclick = () => {
+        resetSessionState(true);
+        openBriefing(SESSION_DOMAIN_ORDER[0]);
+      };
+
+      document.getElementById('sumPracticeWeakestBtn').onclick = () => {
+        resetSessionState(false, weakestSkill.key);
+        openBriefing(weakestSkill.key);
+      };
+
+      document.getElementById('sumMenuBtn').onclick = () => {
+        showView('menu');
+      };
+
+      sound.playSuccess();
+      showView('summary');
+    }
+
+    /* ==========================================================
+       7. MINI-GAME 1: WORKING MEMORY (SEQUENCE RECALL)
+       ========================================================== */
+    const memoryState = {
+      sequence: [],
+      playerStep: 0,
+      sequenceLength: 3,
+      padCount: 4,
+      isShowing: false,
+      pads: []
+    };
+
+    const PAD_FREQUENCIES = [261.63, 329.63, 392.00, 493.88, 587.33, 698.46]; // C4, E4, G4, B4, D5, F5
+
+    function initMemoryGame() {
+      document.getElementById('arenaMemory').style.display = 'flex';
+      memoryState.sequenceLength = 2 + state.currentLevel; // starts at 3
+      memoryState.padCount = state.currentLevel >= 4 ? 6 : 4;
+      createMemoryPads();
+      memoryNextSequence();
+    }
+
+    function createMemoryPads() {
+      const grid = document.getElementById('memoryGrid');
+      grid.innerHTML = '';
+      grid.className = `memory-grid ${memoryState.padCount === 6 ? 'six-pads' : ''}`;
+      memoryState.pads = [];
+
+      for (let i = 0; i < memoryState.padCount; i++) {
+        const pad = document.createElement('button');
+        pad.className = `memory-pad pad-${i}`;
+        pad.innerHTML = `
+          <span>${i + 1}</span>
+          <span class="pad-key">[${i + 1}]</span>
+        `;
+        pad.addEventListener('click', () => handleMemoryPadInput(i));
+        grid.appendChild(pad);
+        memoryState.pads.push(pad);
+      }
+    }
+
+    function memoryNextSequence() {
+      memoryState.sequence = [];
+      memoryState.playerStep = 0;
+      for (let i = 0; i < memoryState.sequenceLength; i++) {
+        memoryState.sequence.push(Math.floor(Math.random() * memoryState.padCount));
+      }
+      playMemorySequence();
+    }
+
+    function playMemorySequence() {
+      memoryState.isShowing = true;
+      state.acceptingInput = false;
+      const statusTag = document.getElementById('memoryStatusTag');
+      if (statusTag) {
+        statusTag.textContent = `Watch sequence (${memoryState.sequenceLength} steps)...`;
+        statusTag.style.borderColor = 'var(--accent-primary)';
+      }
+
+      let step = 0;
+      const onTime = Math.max(220, 420 - state.currentLevel * 20);
+      const offTime = 120;
+
+      function flashNext() {
+        if (step >= memoryState.sequence.length) {
+          memoryState.isShowing = false;
+          state.acceptingInput = true;
+          if (statusTag) {
+            statusTag.textContent = 'Your turn! Repeat the pattern.';
+            statusTag.style.borderColor = 'var(--accent-success)';
+          }
+          return;
+        }
+
+        const padIdx = memoryState.sequence[step];
+        const padEl = memoryState.pads[padIdx];
+        if (padEl) {
+          padEl.classList.add('lit');
+          sound.playTone(PAD_FREQUENCIES[padIdx], 'sine', onTime / 1000);
+        }
+
+        const t1 = setTimeout(() => {
+          if (padEl) padEl.classList.remove('lit');
+          step++;
+          const t2 = setTimeout(flashNext, offTime);
+          addCleanup(() => clearTimeout(t2));
+        }, onTime);
+        addCleanup(() => clearTimeout(t1));
+      }
+
+      const initialDelay = setTimeout(flashNext, 600);
+      addCleanup(() => clearTimeout(initialDelay));
+    }
+
+    function handleMemoryPadInput(padIdx) {
+      if (!state.acceptingInput || memoryState.isShowing) return;
+
+      const padEl = memoryState.pads[padIdx];
+      if (padEl) {
+        padEl.classList.add('lit');
+        sound.playTone(PAD_FREQUENCIES[padIdx], 'sine', 0.18);
+        setTimeout(() => padEl.classList.remove('lit'), 180);
+      }
+
+      const expected = memoryState.sequence[memoryState.playerStep];
+      if (padIdx === expected) {
+        memoryState.playerStep++;
+        if (memoryState.playerStep >= memoryState.sequence.length) {
+          // Success!
+          state.acceptingInput = false;
+          sound.playSuccess();
+          showFeedback(`Sequence Cleared! (${memoryState.sequenceLength} steps)`, true);
+
+          state.domainStats.memory.successes++;
+          state.domainStats.memory.maxSequence = Math.max(state.domainStats.memory.maxSequence, memoryState.sequenceLength);
+          if (memoryState.sequenceLength > highScores.memoryBestLength) {
+            highScores.memoryBestLength = memoryState.sequenceLength;
+            saveHighScores();
+          }
+
+          const points = 100 * state.currentLevel + (state.runningStreak * 25);
+          memoryState.sequenceLength++;
+          onDomainTrialFinished(true, points);
+        }
+      } else {
+        // Wrong pad!
+        state.acceptingInput = false;
+        sound.playError();
+        showFeedback('Wrong sequence! Try again.', false);
+        shakeArena();
+        onDomainTrialFinished(false, 0);
+      }
+    }
+
+    /* ==========================================================
+       8. MINI-GAME 2: SPATIAL / VISUAL REASONING (ROTATION)
+       ========================================================= */
+    const spatialState = {
+      targetShapeMatrix: null,
+      targetRotation: 0,
+      options: [],
+      correctOptionIdx: 0,
+      startTime: 0
+    };
+
+    // Polyomino block definitions (4x4 grids of 1s and 0s)
+    const BASE_SHAPES = [
+      // F-shape
+      [[0,1,1,0],[1,1,0,0],[0,1,0,0],[0,0,0,0]],
+      // L-notch
+      [[1,0,0,0],[1,0,0,0],[1,1,1,0],[0,0,1,0]],
+      // Asymmetric T-stepped
+      [[1,1,1,0],[0,1,0,0],[0,1,1,0],[0,0,0,0]],
+      // Hook
+      [[1,1,0,0],[0,1,0,0],[0,1,1,1],[0,0,0,0]],
+      // Z-asymmetric
+      [[1,1,0,0],[0,1,1,0],[0,0,1,1],[0,0,0,0]],
+      // Cross with missing arm
+      [[0,1,0,0],[1,1,1,0],[0,0,1,0],[0,0,0,0]]
+    ];
+
+    function rotateMatrix(matrix, times) {
+      let res = matrix.map(row => [...row]);
+      for (let t = 0; t < (times % 4); t++) {
+        const N = res.length;
+        const next = Array.from({ length: N }, () => Array(N).fill(0));
+        for (let r = 0; r < N; r++) {
+          for (let c = 0; c < N; c++) {
+            next[c][N - 1 - r] = res[r][c];
+          }
+        }
+        res = next;
+      }
+      return res;
+    }
+
+    function mirrorMatrix(matrix) {
+      return matrix.map(row => [...row].reverse());
+    }
+
+    function alterMatrix(matrix) {
+      const res = matrix.map(row => [...row]);
+      // find a 1 and turn to 0, or find a 0 and turn to 1
+      for (let r = 0; r < res.length; r++) {
+        for (let c = 0; c < res.length; c++) {
+          if (res[r][c] === 1) {
+            res[r][c] = 0;
+            res[(r + 1) % res.length][(c + 1) % res.length] = 1;
+            return res;
+          }
+        }
+      }
+      return res;
+    }
+
+    function renderMatrixToSvg(matrix, size = 110, color = '#3b82f6') {
+      const N = matrix.length;
+      const cellSize = size / N;
+      let rects = '';
+
+      for (let r = 0; r < N; r++) {
+        for (let c = 0; c < N; c++) {
+          if (matrix[r][c] === 1) {
+            rects += `
+              <rect x="${c * cellSize + 2}" y="${r * cellSize + 2}" 
+                    width="${cellSize - 4}" height="${cellSize - 4}" 
+                    rx="4" fill="${color}" stroke="#1e293b" stroke-width="1.5" />
+              <circle cx="${c * cellSize + cellSize / 2}" cy="${r * cellSize + cellSize / 2}" r="3" fill="#ffffff" opacity="0.6"/>
+            `;
+          }
+        }
+      }
+
+      return `
+        <svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" style="display:block;">
+          <rect width="${size}" height="${size}" rx="8" fill="rgba(0,0,0,0.03)" />
+          ${rects}
+        </svg>
+      `;
+    }
+
+    function initSpatialGame() {
+      document.getElementById('arenaSpatial').style.display = 'flex';
+      spatialNextTrial();
+    }
+
+    function spatialNextTrial() {
+      state.acceptingInput = true;
+      const shapeIdx = Math.floor(Math.random() * BASE_SHAPES.length);
+      const baseShape = BASE_SHAPES[shapeIdx];
+
+      // Random target orientation
+      const targetRot = Math.floor(Math.random() * 4);
+      spatialState.targetShapeMatrix = rotateMatrix(baseShape, targetRot);
+
+      document.getElementById('spatialTargetSvg').innerHTML = renderMatrixToSvg(spatialState.targetShapeMatrix, 120, '#3b82f6');
+
+      // Prepare 4 candidate options
+      // 1 Correct match: target shape rotated by 1, 2, or 3 increments (90°, 180°, 270°)
+      const validRots = [1, 2, 3];
+      const matchRot = validRots[Math.floor(Math.random() * validRots.length)];
+      const correctMatrix = rotateMatrix(spatialState.targetShapeMatrix, matchRot);
+
+      // 2 Reflected distractors: mirrored shape with random rotations
+      const mirrored1 = rotateMatrix(mirrorMatrix(spatialState.targetShapeMatrix), Math.floor(Math.random() * 4));
+      const mirrored2 = rotateMatrix(mirrorMatrix(spatialState.targetShapeMatrix), (matchRot + 1) % 4);
+
+      // 1 Altered distractor: shape with a block altered
+      const altered = rotateMatrix(alterMatrix(spatialState.targetShapeMatrix), Math.floor(Math.random() * 4));
+
+      const candidates = [
+        { matrix: correctMatrix, isCorrect: true, label: 'Match' },
+        { matrix: mirrored1, isCorrect: false, label: 'Mirrored' },
+        { matrix: mirrored2, isCorrect: false, label: 'Mirrored' },
+        { matrix: altered, isCorrect: false, label: 'Altered' }
+      ];
+
+      // Shuffle candidates
+      for (let i = candidates.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [candidates[i], candidates[j]] = [candidates[j], candidates[i]];
+      }
+
+      spatialState.options = candidates;
+      spatialState.correctOptionIdx = candidates.findIndex(c => c.isCorrect);
+      spatialState.startTime = performance.now();
+
+      renderSpatialOptions();
+    }
+
+    function renderSpatialOptions() {
+      const container = document.getElementById('spatialOptionsGrid');
+      container.innerHTML = '';
+
+      spatialState.options.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'spatial-option-btn';
+        btn.id = `spatialOpt_${idx}`;
+        btn.innerHTML = `
+          ${renderMatrixToSvg(opt.matrix, 80, '#64748b')}
+          <span class="key-badge">[${idx + 1}]</span>
+        `;
+        btn.addEventListener('click', () => handleSpatialSelection(idx));
+        container.appendChild(btn);
+      });
+    }
+
+    function handleSpatialSelection(selectedIdx) {
+      if (!state.acceptingInput) return;
+      state.acceptingInput = false;
+
+      const elapsed = performance.now() - spatialState.startTime;
+      const isCorrect = (selectedIdx === spatialState.correctOptionIdx);
+      const optBtns = document.querySelectorAll('.spatial-option-btn');
+
+      optBtns.forEach((btn, idx) => {
+        if (idx === spatialState.correctOptionIdx) {
+          btn.classList.add('correct-reveal');
+        } else if (idx === selectedIdx && !isCorrect) {
+          btn.classList.add('wrong-reveal');
+        }
+      });
+
+      state.domainStats.spatial.total++;
+      state.domainStats.spatial.totalTimeMs += elapsed;
+
+      if (isCorrect) {
+        sound.playSuccess();
+        state.domainStats.spatial.correct++;
+        state.domainStats.spatial.levelReached = Math.max(state.domainStats.spatial.levelReached, state.currentLevel);
+
+        if (state.currentLevel > highScores.spatialBestLevel) {
+          highScores.spatialBestLevel = state.currentLevel;
+          saveHighScores();
+        }
+
+        const speedBonus = Math.max(20, Math.round(500 - elapsed / 10));
+        const points = 120 * state.currentLevel + speedBonus;
+        showFeedback(`Match Found! (${Math.round(elapsed)}ms) +${points}`, true);
+        onDomainTrialFinished(true, points);
+      } else {
+        sound.playError();
+        showFeedback('Incorrect rotation match (Mirrored/Altered)', false);
+        onDomainTrialFinished(false, 0);
+      }
+    }
+
+    /* ==========================================================
+       9. MINI-GAME 3: REACTION TIME & FOCUS (SELECTIVE TARGET)
+       ========================================================== */
+    const reactionState = {
+      targetSymbol: '⭐',
+      targetColor: '#10b981',
+      distractors: [
+        { sym: '🔺', color: '#ef4444' },
+        { sym: '◼️', color: '#3b82f6' },
+        { sym: '⭕', color: '#94a3b8' },
+        { sym: '🔷', color: '#8b5cf6' }
+      ],
+      activeSlotIdx: -1,
+      isTargetActive: false,
+      stimulusTimestamp: 0,
+      timeoutHandle: null,
+      delayHandle: null
+    };
+
+    function initReactionGame() {
+      document.getElementById('arenaReaction').style.display = 'flex';
+      buildReactionGrid();
+      reactionNextTrial();
+    }
+
+    function buildReactionGrid() {
+      const grid = document.getElementById('reactionArenaGrid');
+      grid.innerHTML = '';
+      for (let i = 0; i < 9; i++) {
+        const slot = document.createElement('div');
+        slot.className = 'reaction-slot';
+        slot.id = `reactionSlot_${i}`;
+        slot.innerHTML = `<span class="slot-key">${i + 1}</span><div class="reaction-slot-content"></div>`;
+        slot.addEventListener('click', () => handleReactionSlotClick(i));
+        grid.appendChild(slot);
+      }
+    }
+
+    function clearReactionSlots() {
+      for (let i = 0; i < 9; i++) {
+        const slot = document.getElementById(`reactionSlot_${i}`);
+        if (slot) {
+          const content = slot.querySelector('.reaction-slot-content');
+          if (content) content.innerHTML = '';
+        }
+      }
+    }
+
+    function reactionNextTrial() {
+      state.acceptingInput = false;
+      clearReactionSlots();
+
+      // Random inter-stimulus delay (600ms to 1400ms) to prevent anticipation
+      const delay = 600 + Math.random() * 800;
+
+      reactionState.delayHandle = setTimeout(() => {
+        spawnReactionStimulus();
+      }, delay);
+      addCleanup(() => clearTimeout(reactionState.delayHandle));
+    }
+
+    function spawnReactionStimulus() {
+      state.acceptingInput = true;
+      clearReactionSlots();
+
+      const slotIdx = Math.floor(Math.random() * 9);
+      reactionState.activeSlotIdx = slotIdx;
+
+      // 75% target chance, 25% distractor
+      const isTarget = Math.random() < 0.75;
+      reactionState.isTargetActive = isTarget;
+
+      const slot = document.getElementById(`reactionSlot_${slotIdx}`);
+      if (!slot) return;
+
+      const content = slot.querySelector('.reaction-slot-content');
+      if (isTarget) {
+        content.innerHTML = `<div class="reaction-stimulus" style="color: ${reactionState.targetColor};">${reactionState.targetSymbol}</div>`;
+      } else {
+        const dist = reactionState.distractors[Math.floor(Math.random() * reactionState.distractors.length)];
+        content.innerHTML = `<div class="reaction-stimulus" style="color: ${dist.color};">${dist.sym}</div>`;
+      }
+
+      reactionState.stimulusTimestamp = performance.now();
+      sound.playTone(isTarget ? 550 : 350, 'sine', 0.05, 0.05);
+
+      // Timeout window based on difficulty level (starts 1100ms down to 550ms)
+      const timeoutMs = Math.max(550, 1100 - state.currentLevel * 70);
+
+      reactionState.timeoutHandle = setTimeout(() => {
+        if (state.acceptingInput) {
+          if (reactionState.isTargetActive) {
+            // Target was missed!
+            state.acceptingInput = false;
+            sound.playError();
+            state.domainStats.reaction.misses++;
+            showFeedback('Missed Target!', false);
+            onDomainTrialFinished(false, 0);
+          } else {
+            // Successfully inhibited clicking the distractor!
+            state.acceptingInput = false;
+            sound.playSuccess();
+            showFeedback('Good Inhibit! Distractor avoided.', true);
+            const points = 80 + state.currentLevel * 10;
+            onDomainTrialFinished(true, points);
+          }
+        }
+      }, timeoutMs);
+      addCleanup(() => clearTimeout(reactionState.timeoutHandle));
+    }
+
+    function handleReactionSlotClick(slotIdx) {
+      if (!state.acceptingInput) return;
+
+      if (slotIdx !== reactionState.activeSlotIdx) {
+        // Clicked empty slot
+        return;
+      }
+
+      clearTimeout(reactionState.timeoutHandle);
+      state.acceptingInput = false;
+
+      const reactionTime = performance.now() - reactionState.stimulusTimestamp;
+
+      if (reactionState.isTargetActive) {
+        // Successful target hit!
+        sound.playSuccess();
+        state.domainStats.reaction.reactionTimes.push(reactionTime);
+
+        // Update high score for reaction time avg
+        const avg = state.domainStats.reaction.reactionTimes.reduce((a, b) => a + b, 0) / state.domainStats.reaction.reactionTimes.length;
+        if (!highScores.reactionBestAvgMs || avg < highScores.reactionBestAvgMs) {
+          highScores.reactionBestAvgMs = avg;
+          saveHighScores();
+        }
+
+        const speedBonus = Math.max(50, Math.round(900 - reactionTime));
+        const points = 100 + speedBonus;
+        showFeedback(`⚡ Fast! ${Math.round(reactionTime)} ms (+${points})`, true);
+        onDomainTrialFinished(true, points);
+      } else {
+        // False alarm: clicked a distractor!
+        sound.playError();
+        state.domainStats.reaction.falseAlarms++;
+        showFeedback('False Alarm! That was a distractor.', false);
+        onDomainTrialFinished(false, 0);
+      }
+    }
+
+    /* ==========================================================
+       10. MINI-GAME 4: LOGIC & DEDUCTION (PROCEDURAL PUZZLES)
+       ========================================================== */
+    const logicState = {
+      puzzleType: 'number', // 'number', 'matrix', 'relation'
+      correctOptionIdx: 0,
+      options: [],
+      startTime: 0
+    };
+
+    function initLogicGame() {
+      document.getElementById('arenaLogic').style.display = 'flex';
+      logicNextTrial();
+    }
+
+    function generateLogicPuzzle(level) {
+      const types = ['number', 'relation'];
+      if (level >= 2) types.push('matrix');
+      const chosenType = types[Math.floor(Math.random() * types.length)];
+
+      if (chosenType === 'number') {
+        // Arithmetic, alternating or geometric sequence
+        const subType = Math.random();
+        if (subType < 0.4) {
+          // Simple arithmetic: a + n * d
+          const start = 2 + Math.floor(Math.random() * 15);
+          const step = 3 + Math.floor(Math.random() * 7);
+          const seq = [start, start + step, start + 2 * step, start + 3 * step, start + 4 * step];
+          const answer = start + 5 * step;
+          const distractors = [answer + step, answer - 1, answer + 2];
+          return {
+            type: 'number',
+            badge: 'Arithmetic Sequence',
+            prompt: 'Identify the next number in this sequence:',
+            seq: seq,
+            answer: answer,
+            options: [answer, ...distractors]
+          };
+        } else if (subType < 0.7) {
+          // Alternating sequence: a, b, a+d, b-k
+          const a = 2 + Math.floor(Math.random() * 8);
+          const b = 20 + Math.floor(Math.random() * 10);
+          const seq = [a, b, a + 3, b - 2, a + 6, b - 4];
+          const answer = a + 9;
+          const distractors = [b - 6, answer + 2, answer - 3];
+          return {
+            type: 'number',
+            badge: 'Alternating Series',
+            prompt: 'Identify the next number in this alternating sequence:',
+            seq: seq,
+            answer: answer,
+            options: [answer, ...distractors]
+          };
+        } else {
+          // Difference of squares or additive
+          const start = 1;
+          const seq = [1, 4, 9, 16, 25];
+          const answer = 36;
+          const distractors = [35, 49, 32];
+          return {
+            type: 'number',
+            badge: 'Square Progressions',
+            prompt: 'Complete the pattern:',
+            seq: seq,
+            answer: answer,
+            options: [answer, ...distractors]
+          };
+        }
+      } else if (chosenType === 'matrix') {
+        // 2x2 Raven Progressive Matrix
+        // Rule: Shape rotates by 90 deg clockwise
+        const shapes = ['▲', '▶', '▼', '◀'];
+        const startIdx = Math.floor(Math.random() * 4);
+        const cell1 = shapes[startIdx % 4];
+        const cell2 = shapes[(startIdx + 1) % 4];
+        const cell3 = shapes[(startIdx + 2) % 4];
+        const answer = shapes[(startIdx + 3) % 4];
+        const distractors = shapes.filter(s => s !== answer);
+
+        return {
+          type: 'matrix',
+          badge: 'Matrix Transformation',
+          prompt: 'Which symbol completes the 2×2 visual grid?',
+          matrix: [cell1, cell2, cell3],
+          answer: answer,
+          options: [answer, ...distractors]
+        };
+      } else {
+        // Relational Deduction
+        const entities = ['Leo', 'Maya', 'Sam', 'Zoe'];
+        const order = [entities[0], entities[1], entities[2], entities[3]];
+        // order[0] > order[1] > order[2] > order[3]
+        const questionTallest = Math.random() < 0.5;
+        const prompt = questionTallest
+          ? `${order[0]} is taller than ${order[1]}. ${order[1]} is taller than ${order[2]}. ${order[2]} is taller than ${order[3]}. Who is the TALLEST?`
+          : `${order[0]} is faster than ${order[1]}. ${order[1]} is faster than ${order[2]}. ${order[2]} is faster than ${order[3]}. Who is the SLOWEST?`;
+        const answer = questionTallest ? order[0] : order[3];
+        const distractors = entities.filter(e => e !== answer);
+
+        return {
+          type: 'relation',
+          badge: 'Relational Logic',
+          prompt: prompt,
+          answer: answer,
+          options: [answer, ...distractors]
+        };
+      }
+    }
+
+    function logicNextTrial() {
+      state.acceptingInput = true;
+      const puzzle = generateLogicPuzzle(state.currentLevel);
+      logicState.puzzleType = puzzle.type;
+
+      document.getElementById('logicBadge').textContent = puzzle.badge;
+      document.getElementById('logicPrompt').textContent = puzzle.prompt;
+
+      const visualBox = document.getElementById('logicVisualContainer');
+      visualBox.innerHTML = '';
+
+      if (puzzle.type === 'number') {
+        const seqDiv = document.createElement('div');
+        seqDiv.className = 'sequence-display';
+        puzzle.seq.forEach(val => {
+          seqDiv.innerHTML += `<div class="seq-item">${val}</div>`;
+        });
+        seqDiv.innerHTML += `<div class="seq-item missing">?</div>`;
+        visualBox.appendChild(seqDiv);
+      } else if (puzzle.type === 'matrix') {
+        const matDiv = document.createElement('div');
+        matDiv.className = 'matrix-grid-2x2';
+        matDiv.innerHTML = `
+          <div class="matrix-cell" style="font-size: 2rem;">${puzzle.matrix[0]}</div>
+          <div class="matrix-cell" style="font-size: 2rem;">${puzzle.matrix[1]}</div>
+          <div class="matrix-cell" style="font-size: 2rem;">${puzzle.matrix[2]}</div>
+          <div class="matrix-cell missing">?</div>
+        `;
+        visualBox.appendChild(matDiv);
+      }
+
+      // Shuffle options
+      const opts = [...puzzle.options];
+      for (let i = opts.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [opts[i], opts[j]] = [opts[j], opts[i]];
+      }
+
+      logicState.options = opts;
+      logicState.correctOptionIdx = opts.indexOf(puzzle.answer);
+      logicState.startTime = performance.now();
+
+      renderLogicOptions();
+    }
+
+    function renderLogicOptions() {
+      const grid = document.getElementById('logicOptionsGrid');
+      grid.innerHTML = '';
+
+      logicState.options.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'logic-opt-btn';
+        btn.innerHTML = `
+          <span>${opt}</span>
+          <span class="key-badge">[${idx + 1}]</span>
+        `;
+        btn.addEventListener('click', () => handleLogicSelection(idx));
+        grid.appendChild(btn);
+      });
+    }
+
+    function handleLogicSelection(selectedIdx) {
+      if (!state.acceptingInput) return;
+      state.acceptingInput = false;
+
+      const elapsed = performance.now() - logicState.startTime;
+      const isCorrect = (selectedIdx === logicState.correctOptionIdx);
+      const optBtns = document.querySelectorAll('.logic-opt-btn');
+
+      optBtns.forEach((btn, idx) => {
+        if (idx === logicState.correctOptionIdx) {
+          btn.classList.add('correct-reveal');
+        } else if (idx === selectedIdx && !isCorrect) {
+          btn.classList.add('wrong-reveal');
+        }
+      });
+
+      state.domainStats.logic.total++;
+      state.domainStats.logic.totalTimeMs += elapsed;
+
+      if (isCorrect) {
+        sound.playSuccess();
+        state.domainStats.logic.correct++;
+        state.domainStats.logic.levelReached = Math.max(state.domainStats.logic.levelReached, state.currentLevel);
+
+        if (state.currentLevel > highScores.logicBestLevel) {
+          highScores.logicBestLevel = state.currentLevel;
+          saveHighScores();
+        }
+
+        const speedBonus = Math.max(25, Math.round(600 - elapsed / 12));
+        const points = 150 * state.currentLevel + speedBonus;
+        showFeedback(`Deduction Correct! (+${points})`, true);
+        onDomainTrialFinished(true, points);
+      } else {
+        sound.playError();
+        showFeedback('Incorrect deduction!', false);
+        onDomainTrialFinished(false, 0);
+      }
+    }
+
+    /* ==========================================================
+       11. KEYBOARD NAVIGATION & SHORTCUT DISPATCHER
+       ========================================================== */
+    window.addEventListener('keydown', (e) => {
+      // Toggle sound on 'S' key
+      if (e.key === 's' || e.key === 'S') {
+        toggleSound();
+        return;
+      }
+      // Toggle theme on 'T' key
+      if (e.key === 't' || e.key === 'T') {
+        toggleTheme();
+        return;
+      }
+      // Escape to return to menu
+      if (e.key === 'Escape') {
+        if (state.mode !== 'menu') {
+          showView('menu');
+        }
+        return;
+      }
+
+      // Space / Enter for Action confirmation
+      if (e.key === ' ' || e.key === 'Enter') {
+        if (state.mode === 'menu') {
+          e.preventDefault();
+          resetSessionState(true);
+          openBriefing(SESSION_DOMAIN_ORDER[0]);
+          return;
+        }
+        if (state.mode === 'briefing') {
+          e.preventDefault();
+          startActiveDomainPlay();
+          return;
+        }
+        if (state.mode === 'transition') {
+          e.preventDefault();
+          const nextBtn = document.getElementById('transNextBtn');
+          if (nextBtn) nextBtn.click();
+          return;
+        }
+        if (state.mode === 'summary') {
+          e.preventDefault();
+          resetSessionState(true);
+          openBriefing(SESSION_DOMAIN_ORDER[0]);
+          return;
+        }
+      }
+
+      // Number keys 1-9 for in-game selections
+      const keyNum = parseInt(e.key, 10);
+      if (!isNaN(keyNum) && keyNum >= 1 && keyNum <= 9) {
+        if (state.mode === 'playing' || state.mode === 'game') {
+          const idx = keyNum - 1;
+          if (state.activeDomain === 'memory') {
+            handleMemoryPadInput(idx);
+          } else if (state.activeDomain === 'spatial') {
+            if (idx >= 0 && idx < 4) handleSpatialSelection(idx);
+          } else if (state.activeDomain === 'reaction') {
+            handleReactionSlotClick(idx);
+          } else if (state.activeDomain === 'logic') {
+            if (idx >= 0 && idx < 4) handleLogicSelection(idx);
+          }
+        }
+      }
+    });
+
+    /* ==========================================================
+       12. THEME & AUDIO CONTROLS
+       ========================================================== */
+    function toggleSound() {
+      sound.enabled = !sound.enabled;
+      document.getElementById('soundIcon').textContent = sound.enabled ? '🔊' : '🔇';
+      sound.playClick();
+    }
+
+    function toggleTheme() {
+      const isDark = document.body.getAttribute('data-theme') === 'dark';
+      document.body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+      document.getElementById('themeIcon').textContent = isDark ? '🌓' : '☀️';
+      try {
+        localStorage.setItem('braingym_theme', isDark ? 'light' : 'dark');
+      } catch (e) {}
+    }
+
+    function loadSavedTheme() {
+      try {
+        const saved = localStorage.getItem('braingym_theme');
+        if (saved === 'dark') {
+          document.body.setAttribute('data-theme', 'dark');
+          document.getElementById('themeIcon').textContent = '☀️';
+        }
+      } catch (e) {}
+    }
+
+    /* ==========================================================
+       13. INITIALIZATION & MENU BINDINGS
+       ========================================================== */
+    function initApp() {
+      loadSavedTheme();
+      loadHighScores();
+
+      // Top bar buttons
+      document.getElementById('brandBtn').onclick = () => showView('menu');
+      document.getElementById('soundToggleBtn').onclick = toggleSound;
+      document.getElementById('themeToggleBtn').onclick = toggleTheme;
+      document.getElementById('exitToMenuBtn').onclick = () => showView('menu');
+
+      // Menu CTAs
+      document.getElementById('startFullSessionBtn').onclick = () => {
+        sound.init();
+        sound.playClick();
+        resetSessionState(true);
+        openBriefing(SESSION_DOMAIN_ORDER[0]);
+      };
+
+      // Practice buttons
+      document.querySelectorAll('.skill-card').forEach(card => {
+        card.addEventListener('click', () => {
+          sound.init();
+          sound.playClick();
+          const skillKey = card.getAttribute('data-skill');
+          resetSessionState(false, skillKey);
+          openBriefing(skillKey);
+        });
+      });
+
+      // Briefing Start Button
+      document.getElementById('startRoundBtn').onclick = () => {
+        sound.playClick();
+        startActiveDomainPlay();
+      };
+
+      showView('menu');
+    }
+
+    // Run when DOM is ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initApp);
+    } else {
+      initApp();
+    }
+
+  })();
+  </script>
+</body>
+</html>
